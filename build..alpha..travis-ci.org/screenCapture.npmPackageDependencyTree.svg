@@ -1,11 +1,14 @@
-<svg height="126" width="720" xmlns="http://www.w3.org/2000/svg">
-<rect height="126" fill="#555" width="720"></rect>
+<svg height="174" width="720" xmlns="http://www.w3.org/2000/svg">
+<rect height="174" fill="#555" width="720"></rect>
 <text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
-<tspan x="10" y="26">└─┬ pinyin@2.8.3 </tspan>
-<tspan x="10" y="42">  ├─┬ commander@1.1.1 </tspan>
-<tspan x="10" y="58">  │ └── keypress@0.1.0 </tspan>
-<tspan x="10" y="74">  ├─┬ nodejieba@2.2.4 </tspan>
-<tspan x="10" y="90">  │ └── nan@2.3.5 </tspan>
-<tspan x="10" y="106">  └── object-assign@4.1.1</tspan>
+<tspan x="10" y="26">17 megabytes installed</tspan>
+<tspan x="10" y="42"></tspan>
+<tspan x="10" y="58">node_modules</tspan>
+<tspan x="10" y="74">└─┬ pinyin@2.8.3 </tspan>
+<tspan x="10" y="90">  ├─┬ commander@1.1.1 </tspan>
+<tspan x="10" y="106">  │ └── keypress@0.1.0 </tspan>
+<tspan x="10" y="122">  ├─┬ nodejieba@2.2.4 </tspan>
+<tspan x="10" y="138">  │ └── nan@2.3.5 </tspan>
+<tspan x="10" y="154">  └── object-assign@4.1.1</tspan>
 </text>
 </svg>

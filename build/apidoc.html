@@ -63,8 +63,26 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.pinyin.pinyin">
+            function <span class="apidocSignatureSpan"></span>pinyin
+            <span class="apidocSignatureSpan">(dict)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.pinyin.compare">
             function <span class="apidocSignatureSpan">pinyin.</span>compare
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.pinyin.toString">
+            function <span class="apidocSignatureSpan">pinyin.</span>toString
             <span class="apidocSignatureSpan">()</span>
             </a>
 
@@ -112,6 +130,45 @@
         <li>
 
             <span class="apidocSignatureSpan">number <span class="apidocSignatureSpan">pinyin.</span>STYLE_TONE2</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.pinyin.compare">module pinyin.compare</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.pinyin.compare.compare">
+            function <span class="apidocSignatureSpan">pinyin.</span>compare
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.pinyin.pinyin">module pinyin.pinyin</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.pinyin.pinyin.pinyin">
+            function <span class="apidocSignatureSpan">pinyin.</span>pinyin
+            <span class="apidocSignatureSpan">(dict)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.pinyin.toString">module pinyin.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.pinyin.toString.toString">
+            function <span class="apidocSignatureSpan">pinyin.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
 
         </li>
 
@@ -182,6 +239,185 @@
 
 
     <h2>
+        <a href="#apidoc.element.pinyin.pinyin" id="apidoc.element.pinyin.pinyin">
+        function <span class="apidocSignatureSpan"></span>pinyin
+        <span class="apidocSignatureSpan">(dict)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Pinyin {
+  constructor (dict) {
+    this._dict = dict;
+  }
+
+  // @param {String} hans 要转为拼音的目标字符串（汉字）。
+  // @param {Object} options, 可选，用于指定拼音风格，是否启用多音字。
+  // @return {Array} 返回的拼音列表。
+  convert (hans, options) {
+
+    if (typeof hans !== &#x22;string&#x22;) {
+      return [];
+    }
+
+    options = assign({}, DEFAULT_OPTIONS, options);
+
+    let pys = [];
+    let nohans = &#x22;&#x22;;
+
+    for(let i = 0, firstCharCode, words, l = hans.length; i &#x3c; l; i++){
+
+      words = hans[i];
+      firstCharCode = words.charCodeAt(0);
+
+      if(this._dict[firstCharCode]){
+
+        // ends of non-chinese words.
+        if(nohans.length &#x3e; 0){
+          pys.push([nohans]);
+          nohans = &#x22;&#x22;; // reset non-chinese words.
+        }
+
+        pys.push(this.single_pinyin(words, options));
+
+      }else{
+        nohans += words;
+      }
+    }
+
+    // 清理最后的非中文字符串。
+    if(nohans.length &#x3e; 0){
+      pys.push([nohans]);
+      nohans = &#x22;&#x22;; // reset non-chinese words.
+    }
+    return pys;
+  }
+
+  // 单字拼音转换。
+  // @param {String} han, 单个汉字
+  // @return {Array} 返回拼音列表，多音字会有多个拼音项。
+  single_pinyin (han, options) {
+
+    if (typeof han !== &#x22;string&#x22;) {
+      return [];
+    }
+    if (han.length !== 1) {
+      return this.single_pinyin(han.charAt(0), options);
+    }
+
+    let hanCode = han.charCodeAt(0);
+
+    if (!this._dict[hanCode]) {
+      return [han];
+    }
+
+    let pys = this._dict[hanCode].split(&#x22;,&#x22;);
+    if(!options.heteronym){
+      return [Pinyin.toFixed(pys[0], options.style)];
+    }
+
+    // 临时存储已存在的拼音，避免多音字拼音转换为非注音风格出现重复。
+    let py_cached = {};
+    let pinyins = [];
+    for(let i = 0, py, l = pys.length; i &#x3c; l; i++){
+      py = Pinyin.toFixed(pys[i], options.style);
+      if(py_cached.hasOwnProperty(py)){
+        continue;
+      }
+      py_cached[py] = py;
+
+      pinyins.push(py);
+    }
+    return pinyins;
+  }
+
+<span class="apidocCodeCommentSpan">  /**
+   * 格式化拼音风格。
+   *
+   * @param {String} pinyin TONE 风格的拼音。
+   * @param {ENUM} style 目标转换的拼音风格。
+   * @return {String} 转换后的拼音。
+   */
+</span>  static toFixed (pinyin, style) {
+    let tone = &#x22;&#x22;; // 声调。
+    let first_letter;
+    let py;
+    switch(style){
+    case PINYIN_STYLE.INITIALS:
+      return initials(pinyin);
+
+    case PINYIN_STYLE.FIRST_LETTER:
+      first_letter = pinyin.charAt(0);
+      if (PHONETIC_SYMBOL.hasOwnProperty(first_letter)) {
+        first_letter = PHONETIC_SYMBOL[first_letter].charAt(0);
+      }
+      return first_letter;
+
+    case PINYIN_STYLE.NORMAL:
+      return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic){
+        return PHONETIC_SYMBOL[$1_phonetic].replace(RE_TONE2, &#x22;$1&#x22;);
+      });
+
+    case PINYIN_STYLE.TO3NE:
+      return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic){
+        return PHONETIC_SYMBOL[$1_phonetic];
+      });
+
+    case PINYIN_STYLE.TONE2:
+      py = pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1){
+        // 声调数值。
+        tone = PHONETIC_SYMBOL[$1].replace(RE_TONE2, &#x22;$2&#x22;);
+
+        return PHONETIC_SYMBOL[$1].replace(RE_TONE2, &#x22;$1&#x22;);
+      });
+      return py + tone;
+
+    case PINYIN_STYLE.TONE:
+    default:
+      return pinyin;
+    }
+  }
+
+  /**
+   * 比较两个汉字转成拼音后的排序顺序，可以用作默认的拼音排序算法。
+   *
+   * @param {String} hanA 汉字字符串 A。
+   * @return {String} hanB 汉字字符串 B。
+   * @return {Number} 返回 -1，0，或 1。
+   */
+  compare (hanA, hanB) {
+    const pinyinA = this.convert(hanA, DEFAULT_OPTIONS);
+    const pinyinB = this.convert(hanB, DEFAULT_OPTIONS);
+    return String(pinyinA).localeCompare(pinyinB);
+  }
+
+  static get STYLE_NORMAL () {
+    return PINYIN_STYLE.NORMAL;
+  }
+  static get STYLE_TONE () {
+    return PINYIN_STYLE.TONE;
+  }
+  static get STYLE_TONE2 () {
+    return PINYIN_STYLE.TONE2;
+  }
+  static get STYLE_TO3NE () {
+    return PINYIN_STYLE.TO3NE;
+  }
+  static get STYLE_INITIALS () {
+    return PINYIN_STYLE.INITIALS;
+  }
+  static get STYLE_FIRST_LETTER () {
+    return PINYIN_STYLE.FIRST_LETTER;
+  }
+  static get DEFAULT_OPTIONS () {
+    return DEFAULT_OPTIONS;
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
         <a href="#apidoc.element.pinyin.compare" id="apidoc.element.pinyin.compare">
         function <span class="apidocSignatureSpan">pinyin.</span>compare
         <span class="apidocSignatureSpan">()</span>
@@ -210,6 +446,21 @@ options 是可选的，可以设定拼音风格，或打开多音字选项。
 
 
     <h2>
+        <a href="#apidoc.element.pinyin.toString" id="apidoc.element.pinyin.toString">
+        function <span class="apidocSignatureSpan">pinyin.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
         <a href="#apidoc.element.pinyin.web_pinyin" id="apidoc.element.pinyin.web_pinyin">
         function <span class="apidocSignatureSpan">pinyin.</span>web_pinyin
         <span class="apidocSignatureSpan">()</span>
@@ -231,6 +482,241 @@ options 是可选的，可以设定拼音风格，或打开多音字选项。
 
 
 
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.pinyin.compare" id="apidoc.module.pinyin.compare">module pinyin.compare</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.pinyin.compare.compare" id="apidoc.element.pinyin.compare.compare">
+        function <span class="apidocSignatureSpan">pinyin.</span>compare
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">compare = function () { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+将传入的中文字符串 (words) 转换成拼音符号串。
+
+options 是可选的，可以设定拼音风格，或打开多音字选项。
+
+返回二维数组，第一维每个数组项位置对应每个中文字符串位置。
+第二维是各个汉字的读音列表，多音字会有多个拼音项。
+
+### 方法 `Number pinyin.<span class="apidocCodeKeywordSpan">compare</span>(a, b)`
+
+按拼音排序的默认算法。
+
+## 参数
+
+### `&#x3c;Boolean&#x3e; options.segment`
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.pinyin.pinyin" id="apidoc.module.pinyin.pinyin">module pinyin.pinyin</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.pinyin.pinyin.pinyin" id="apidoc.element.pinyin.pinyin.pinyin">
+        function <span class="apidocSignatureSpan">pinyin.</span>pinyin
+        <span class="apidocSignatureSpan">(dict)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">class Pinyin {
+  constructor (dict) {
+    this._dict = dict;
+  }
+
+  // @param {String} hans 要转为拼音的目标字符串（汉字）。
+  // @param {Object} options, 可选，用于指定拼音风格，是否启用多音字。
+  // @return {Array} 返回的拼音列表。
+  convert (hans, options) {
+
+    if (typeof hans !== &#x22;string&#x22;) {
+      return [];
+    }
+
+    options = assign({}, DEFAULT_OPTIONS, options);
+
+    let pys = [];
+    let nohans = &#x22;&#x22;;
+
+    for(let i = 0, firstCharCode, words, l = hans.length; i &#x3c; l; i++){
+
+      words = hans[i];
+      firstCharCode = words.charCodeAt(0);
+
+      if(this._dict[firstCharCode]){
+
+        // ends of non-chinese words.
+        if(nohans.length &#x3e; 0){
+          pys.push([nohans]);
+          nohans = &#x22;&#x22;; // reset non-chinese words.
+        }
+
+        pys.push(this.single_pinyin(words, options));
+
+      }else{
+        nohans += words;
+      }
+    }
+
+    // 清理最后的非中文字符串。
+    if(nohans.length &#x3e; 0){
+      pys.push([nohans]);
+      nohans = &#x22;&#x22;; // reset non-chinese words.
+    }
+    return pys;
+  }
+
+  // 单字拼音转换。
+  // @param {String} han, 单个汉字
+  // @return {Array} 返回拼音列表，多音字会有多个拼音项。
+  single_pinyin (han, options) {
+
+    if (typeof han !== &#x22;string&#x22;) {
+      return [];
+    }
+    if (han.length !== 1) {
+      return this.single_pinyin(han.charAt(0), options);
+    }
+
+    let hanCode = han.charCodeAt(0);
+
+    if (!this._dict[hanCode]) {
+      return [han];
+    }
+
+    let pys = this._dict[hanCode].split(&#x22;,&#x22;);
+    if(!options.heteronym){
+      return [Pinyin.toFixed(pys[0], options.style)];
+    }
+
+    // 临时存储已存在的拼音，避免多音字拼音转换为非注音风格出现重复。
+    let py_cached = {};
+    let pinyins = [];
+    for(let i = 0, py, l = pys.length; i &#x3c; l; i++){
+      py = Pinyin.toFixed(pys[i], options.style);
+      if(py_cached.hasOwnProperty(py)){
+        continue;
+      }
+      py_cached[py] = py;
+
+      pinyins.push(py);
+    }
+    return pinyins;
+  }
+
+<span class="apidocCodeCommentSpan">  /**
+   * 格式化拼音风格。
+   *
+   * @param {String} pinyin TONE 风格的拼音。
+   * @param {ENUM} style 目标转换的拼音风格。
+   * @return {String} 转换后的拼音。
+   */
+</span>  static toFixed (pinyin, style) {
+    let tone = &#x22;&#x22;; // 声调。
+    let first_letter;
+    let py;
+    switch(style){
+    case PINYIN_STYLE.INITIALS:
+      return initials(pinyin);
+
+    case PINYIN_STYLE.FIRST_LETTER:
+      first_letter = pinyin.charAt(0);
+      if (PHONETIC_SYMBOL.hasOwnProperty(first_letter)) {
+        first_letter = PHONETIC_SYMBOL[first_letter].charAt(0);
+      }
+      return first_letter;
+
+    case PINYIN_STYLE.NORMAL:
+      return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic){
+        return PHONETIC_SYMBOL[$1_phonetic].replace(RE_TONE2, &#x22;$1&#x22;);
+      });
+
+    case PINYIN_STYLE.TO3NE:
+      return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic){
+        return PHONETIC_SYMBOL[$1_phonetic];
+      });
+
+    case PINYIN_STYLE.TONE2:
+      py = pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1){
+        // 声调数值。
+        tone = PHONETIC_SYMBOL[$1].replace(RE_TONE2, &#x22;$2&#x22;);
+
+        return PHONETIC_SYMBOL[$1].replace(RE_TONE2, &#x22;$1&#x22;);
+      });
+      return py + tone;
+
+    case PINYIN_STYLE.TONE:
+    default:
+      return pinyin;
+    }
+  }
+
+  /**
+   * 比较两个汉字转成拼音后的排序顺序，可以用作默认的拼音排序算法。
+   *
+   * @param {String} hanA 汉字字符串 A。
+   * @return {String} hanB 汉字字符串 B。
+   * @return {Number} 返回 -1，0，或 1。
+   */
+  compare (hanA, hanB) {
+    const pinyinA = this.convert(hanA, DEFAULT_OPTIONS);
+    const pinyinB = this.convert(hanB, DEFAULT_OPTIONS);
+    return String(pinyinA).localeCompare(pinyinB);
+  }
+
+  static get STYLE_NORMAL () {
+    return PINYIN_STYLE.NORMAL;
+  }
+  static get STYLE_TONE () {
+    return PINYIN_STYLE.TONE;
+  }
+  static get STYLE_TONE2 () {
+    return PINYIN_STYLE.TONE2;
+  }
+  static get STYLE_TO3NE () {
+    return PINYIN_STYLE.TO3NE;
+  }
+  static get STYLE_INITIALS () {
+    return PINYIN_STYLE.INITIALS;
+  }
+  static get STYLE_FIRST_LETTER () {
+    return PINYIN_STYLE.FIRST_LETTER;
+  }
+  static get DEFAULT_OPTIONS () {
+    return DEFAULT_OPTIONS;
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.pinyin.toString" id="apidoc.module.pinyin.toString">module pinyin.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.pinyin.toString.toString" id="apidoc.element.pinyin.toString.toString">
+        function <span class="apidocSignatureSpan">pinyin.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
 
 
 </div>
