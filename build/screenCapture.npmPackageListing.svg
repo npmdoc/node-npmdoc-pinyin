@@ -1,19 +1,19 @@
 <svg height="254" width="720" xmlns="http://www.w3.org/2000/svg">
 <rect height="254" fill="#555" width="720"></rect>
 <text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
-<tspan x="10" y="26">  0.  2017-04-18 07:56:02 +0000  3753947 bytes  .</tspan>
-<tspan x="10" y="42">  1.  2017-04-18 07:56:02 +0000     2989 bytes  CHANGELOG.md</tspan>
-<tspan x="10" y="58">  2.  2017-04-18 07:56:02 +0000     7473 bytes  README.md</tspan>
-<tspan x="10" y="74">  3.  2017-04-18 07:56:02 +0000     1047 bytes  bin/pinyin</tspan>
-<tspan x="10" y="90">  4.  2017-04-18 07:56:02 +0000    31164 bytes  data/dict-zi-web.js</tspan>
-<tspan x="10" y="106">  5.  2017-04-18 07:56:02 +0000  1412670 bytes  data/dict-zi.js</tspan>
-<tspan x="10" y="122">  6.  2017-04-18 07:56:02 +0000   367194 bytes  data/dict.bin</tspan>
-<tspan x="10" y="138">  7.  2017-04-18 07:56:02 +0000  1918199 bytes  data/phrases-dict.js</tspan>
-<tspan x="10" y="154">  8.  2017-04-18 07:56:02 +0000       37 bytes  index.js</tspan>
-<tspan x="10" y="170">  9.  2017-04-18 07:56:02 +0000     3154 bytes  lib/index.js</tspan>
-<tspan x="10" y="186"> 10.  2017-04-18 07:56:02 +0000      423 bytes  lib/phonetic-symbol.js</tspan>
-<tspan x="10" y="202"> 11.  2017-04-18 07:56:02 +0000     5656 bytes  lib/pinyin.js</tspan>
-<tspan x="10" y="218"> 12.  2017-04-18 07:56:02 +0000     1070 bytes  lib/web-pinyin.js</tspan>
-<tspan x="10" y="234"> 13.  2017-04-18 07:56:02 +0000     2871 bytes  package.json</tspan>
+<tspan x="10" y="26">  0.  2017-04-18 07:57:09 +0000  3753947 bytes  .</tspan>
+<tspan x="10" y="42">  1.  2017-04-18 07:57:09 +0000     2989 bytes  CHANGELOG.md</tspan>
+<tspan x="10" y="58">  2.  2017-04-18 07:57:09 +0000     7473 bytes  README.md</tspan>
+<tspan x="10" y="74">  3.  2017-04-18 07:57:09 +0000     1047 bytes  bin/pinyin</tspan>
+<tspan x="10" y="90">  4.  2017-04-18 07:57:09 +0000    31164 bytes  data/dict-zi-web.js</tspan>
+<tspan x="10" y="106">  5.  2017-04-18 07:57:09 +0000  1412670 bytes  data/dict-zi.js</tspan>
+<tspan x="10" y="122">  6.  2017-04-18 07:57:09 +0000   367194 bytes  data/dict.bin</tspan>
+<tspan x="10" y="138">  7.  2017-04-18 07:57:09 +0000  1918199 bytes  data/phrases-dict.js</tspan>
+<tspan x="10" y="154">  8.  2017-04-18 07:57:09 +0000       37 bytes  index.js</tspan>
+<tspan x="10" y="170">  9.  2017-04-18 07:57:09 +0000     3154 bytes  lib/index.js</tspan>
+<tspan x="10" y="186"> 10.  2017-04-18 07:57:09 +0000      423 bytes  lib/phonetic-symbol.js</tspan>
+<tspan x="10" y="202"> 11.  2017-04-18 07:57:09 +0000     5656 bytes  lib/pinyin.js</tspan>
+<tspan x="10" y="218"> 12.  2017-04-18 07:57:09 +0000     1070 bytes  lib/web-pinyin.js</tspan>
+<tspan x="10" y="234"> 13.  2017-04-18 07:57:09 +0000     2871 bytes  package.json</tspan>
 </text>
 </svg>
