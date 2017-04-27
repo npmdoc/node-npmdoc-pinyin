@@ -1,6 +1,6 @@
 # npmdoc-pinyin
 
-#### api documentation for  [pinyin (v2.8.3)](http://pinyin.hotoo.me/)  [![npm package](https://img.shields.io/npm/v/npmdoc-pinyin.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-pinyin) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-pinyin.svg)](https://travis-ci.org/npmdoc/node-npmdoc-pinyin)
+#### basic api documentation for  [pinyin (v2.8.3)](http://pinyin.hotoo.me/)  [![npm package](https://img.shields.io/npm/v/npmdoc-pinyin.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-pinyin) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-pinyin.svg)](https://travis-ci.org/npmdoc/node-npmdoc-pinyin)
 
 #### 汉语拼音转换工具。
 
